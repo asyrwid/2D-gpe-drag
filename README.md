@@ -5,7 +5,7 @@ numerical evolution of a binary mixture of bosons with drag in 2D
 
 ## Simulated system
 
-Here, we study dynamics of the binary superfluid Bose system in 2D described by the following energy functional
+Here, we study dynamics of a binary superfluid Bose system in 2D described by the following energy functional
 
 $ \mathcal{E}=\int\mathrm{d}{\bf r} [\varepsilon_0 +  \varepsilon_\text{b-c} + \varepsilon_\text{d-d} + \varepsilon_\text{drag-reg} + \varepsilon_\text{AB-drag} + \varepsilon_\text{vector-drag}], $
 
