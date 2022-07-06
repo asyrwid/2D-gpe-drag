@@ -11,9 +11,9 @@ $ \mathcal{E}=\int\mathrm{d}{\bf r} [\varepsilon_0 +  \varepsilon_\text{b-c} + \
 
 where standard kinetic, harmonic trapping potential and intra-component contact interaction terms are included in 
 
-$\varepsilon_0 =  \sum_\alpha\left[ \frac{1}{2}|\nabla \psi_\alpha|^2 + \frac{1}{2}\omega_\alpha^2 {\bf r}^2|\psi_\alpha|^2 + g_\alpha |\psi_\alpha|^4 \right]$
+$\varepsilon_0 =  \sum_\alpha\left[ \frac{1}{2}|\nabla \psi_\alpha|^2 + \frac{1}{2}\omega_\alpha^2 {\bf r}^2|\psi_\alpha|^2 + g_\alpha |\psi_\alpha|^4 \right],$
 
-with $\alpha\in\{a, b\}$ denoting components. In addition, we assume beyond contact intra-component interactions decaying as $r^{-3}$
+with $\alpha\in\{a, b\}$ denoting components. Additionally, we assume beyond contact intra-component interactions vanishing as $1/\text{distance}^{3}$
 
 $\varepsilon_\text{b-c}({\bf r}) = \sum_\alpha\int \mathrm{d} {\bf r}' g_{\alpha}^{\text{(b-c)}}|\psi_\alpha({\bf r})|^2 |\psi_\alpha({\bf r}')|^2/|{\bf r} - {\bf r}'|^3,$
 
