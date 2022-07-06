@@ -62,7 +62,7 @@ def generate_imag_evol_gif():
     max_val_a = np.absolute(results['evol_fa']).max()
     max_val_b = np.absolute(results['evol_fb']).max()
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4), dpi = 32)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4), dpi = 64)
     fig.set_facecolor('white')
 
     im1 = ax1.imshow(
