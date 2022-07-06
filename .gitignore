@@ -1,5 +1,6 @@
 tmp/*
 !tmp/.keep
+!tmp/imag_time_evolution.gif
 data/*
 !data/.keep
 
@@ -81,6 +82,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # IPython
 profile_default/

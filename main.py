@@ -6,13 +6,13 @@ from utils.structures import (
     TrapParameters,
     EvolutionConfig,
 )
-from evolution import Evolution
+from utils.evolution import Evolution
 
 
 def run():
 
     system_parameters = SystemParameters(
-        N=50,
+        N=70,
         L=0.5,
         dt=-0.0001*1j,
     )
@@ -23,8 +23,8 @@ def run():
         g_parallel=0,
         g_perpendicular=0,
         potential_range=0.05,
-        long_ga=-0.175,
-        long_gb=-0.175,
+        long_ga=-0.16,
+        long_gb=-0.2,
     )
     trap_parameters_a = TrapParameters(
         wx=0,
@@ -40,8 +40,8 @@ def run():
     )
 
     config = EvolutionConfig(
-        Nsaved=10,
-        Nsteps=200,
+        Nsaved=100,
+        Nsteps=10,
         system_parameters=system_parameters,
         interaction_parameters=interaction_parameters,
         trap_parameters_a=trap_parameters_a,
@@ -86,5 +86,10 @@ def initial_states(N: int, L: float):
 
             fa0[i, j] = np.exp(-a*xa2 - a*ya2)
             fb0[i, j] = np.exp(-a*xb2 - a*yb2)
+            # states are normalized before the evolution loops
 
     return fa0, fb0
+
+
+if __name__ == "__main__":
+    run()

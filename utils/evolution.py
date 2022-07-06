@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import sparse
+from tqdm import tqdm
 
 from utils.matrices import (
     laplacian2D_pbc,
@@ -120,11 +121,16 @@ class Evolution():
                 py += -1j*(self.dx**2)*np.conjugate(f[i, j])*dfy
         return np.array([px, py])
 
-    def crank_nicolson_evolution(self, fa0, fb0, Nsaved, Nsteps):
+    def crank_nicolson_evolution(self,
+                                 fa0: np.array,
+                                 fb0: np.array,
+                                 Nsaved: int,
+                                 Nsteps: int
+                                 ) -> dict:
         # fa0 and fb0 are initial states for the evolution
         # they should be given in the form of 2d arrays
         # Nsaved = number of saved outcomes in the whole evolution
-        # Nsteps =  number of dt time steps per single outcome
+        # Nsteps = number of dt time steps per single outcome
         # Each outcome is saved after Delta_t = Nsteps*dt
 
         # ensure that the states are normalized
@@ -140,6 +146,7 @@ class Evolution():
         norms_b = np.zeros((Nsaved+1), dtype=np.float64)
         momenta_a = np.zeros((Nsaved+1, 2), dtype=np.complex128)
         momenta_b = np.zeros((Nsaved+1, 2), dtype=np.complex128)
+        times = np.zeros((Nsaved+1), dtype=np.complex128)
         # and set the first elements
         evol_fa[0] = fa0
         evol_fb[0] = fb0
@@ -156,6 +163,7 @@ class Evolution():
         norms_b[0] = (np.sum(np.absolute(fb0.flatten())**2)*self.dx**2)
         momenta_a[0] = self.compute_momentum(fa0)
         momenta_b[0] = self.compute_momentum(fb0)
+        times[0] = 0
         # set extrapolation for the initial state
         fa1 = fa0
         fb1 = fb0
@@ -165,7 +173,9 @@ class Evolution():
         flat_fa1 = fa1.flatten()
         flat_fb1 = fb1.flatten()
 
-        for save in range(1, Nsaved+1):
+        pbar = tqdm(range(1, Nsaved + 1), total=Nsaved)
+
+        for save in pbar:  # range(1, Nsaved+1):
             for step in range(0, Nsteps):
                 # caclutate linear part: O2 matrix action
                 if self.different_traps is True:
@@ -239,21 +249,26 @@ class Evolution():
             norm_b = (np.sum(np.absolute(fb1.flatten())**2)*self.dx**2)
             momentum_a = self.compute_momentum(fa1)
             momentum_b = self.compute_momentum(fb1)
+            time = save * Nsteps * self.dt
 
-            print("E="+str(round(energy, 5))
-                  + " n_a="+str(round(norm_a, 5))
-                  + " n_b="+str(round(norm_b, 5))
-                  + " p_a="+str([round(momentum_a[0], 5),
-                                 round(momentum_a[1], 5)])
-                  + " p_b="+str([round(momentum_b[0], 5),
-                                 round(momentum_b[1], 5)]),
-                  flush=True)
+            prt_e = round(np.real(energy), 5)
+            prt_na = round(norm_a, 5)
+            prt_nb = round(norm_b, 5)
+            prt_pa = [round(np.real(momentum_a[0]), 5),
+                      round(np.real(momentum_a[1]), 5)]
+            prt_pb = [round(np.real(momentum_b[0]), 5),
+                      round(np.real(momentum_b[1]), 5)]
+
+            print_line = f"E = {prt_e} norm_a = {prt_na} norm_b = {prt_nb} p_a = {prt_pa} p_b = {prt_pb}"
+            desc = print_line
+            pbar.set_description(desc)
 
             energies[save] = energy
             norms_a[save] = norm_a
             norms_b[save] = norm_b
             momenta_a[save] = momentum_a
             momenta_b[save] = momentum_b
+            times[save] = time
 
             results = {
                 "evol_fa": evol_fa,
@@ -262,7 +277,8 @@ class Evolution():
                 "norms_a": norms_a,
                 "norms_b": norms_b,
                 "momenta_a": momenta_a,
-                "momenta_b": momenta_b
+                "momenta_b": momenta_b,
+                "times": times,
             }
 
         return results
